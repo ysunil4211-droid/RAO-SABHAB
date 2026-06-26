@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AR Coaching - Preparation for all Competitive Exams</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Roboto,sans-serif; }
+        :root { --primary:#c0392b; --secondary:#f1c40f; --accent:#2c3e50; --light:#fef9f7; --shadow:0 20px 60px rgba(0,0,0,0.12); --radius:18px; }
+        html { scroll-behavior:smooth; }
+        body {
+            background: var(--light);
+            color: #1a1a2e;
+            position: relative;
+            min-height: 100vh;
+        }
+        /* ===== BACKGROUND WATERMARK: ONLY "AR" ===== */
+        body::before {
+            content: "AR";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18rem;
+            font-weight: 900;
+            color: rgba(192, 57, 43, 0.04);   /* Very light red */
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+            text-align: center;
+            width: 100%;
+            letter-spacing: 2px;
+            font-style: italic;
+            text-shadow: 0 0 30px rgba(0,0,0,0.02);
+        }
+        /* All content above watermark */
+        header, .hero, section, footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        ::-webkit-scrollbar { width:8px; }
+        ::-webkit-scrollbar-track { background:#f1f1f1; }
+        ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:10px; }
+
+        /* preloader */
+        #preloader { position:fixed; inset:0; z-index:99999; background:var(--light); display:flex; align-items:center; justify-content:center; flex-direction:column; transition:opacity 0.6s; }
+        #preloader.hide { opacity:0; pointer-events:none; }
+        #preloader .loader-logo { font-size:3.2rem; font-weight:900; color:var(--primary); }
+        #preloader .loader-logo span { color:var(--secondary); }
+        #preloader .loader-bar { margin-top:20px; width:200px; height:4px; background:#ddd; border-radius:4px; overflow:hidden; }
+        #preloader .loader-bar::after { content:''; display:block; width:60%; height:100%; background:var(--primary); animation:load 1.2s ease-in-out infinite; }
+        @keyframes load { 0%{ transform:translateX(-100%); } 100%{ transform:translateX(200%); } }
+
+        /* header */
+        header { position:fixed; top:0; left:0; width:100%; z-index:999; background:rgba(255,255,255,0.92); backdrop-filter:blur(14px); padding:10px 30px; display:flex; align-items:center; justify-content:space-between; transition:0.3s; }
+        header.scrolled { padding:6px 30px; box-shadow:0 8px 40px rgba(0,0,0,0.10); }
+        .logo-area { display:flex; align-items:center; gap:14px; }
+        .logo-img { width:56px; height:56px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.8rem; font-weight:900; box-shadow:0 4px 14px rgba(192,57,43,0.35); border:3px solid var(--secondary); }
+        .logo-text { font-size:1.9rem; font-weight:800; color:#1a1a2e; }
+        .logo-text span { color:var(--primary); }
+        .logo-text small { display:block; font-size:0.6rem; font-weight:400; color:#777; letter-spacing:1px; margin-top:-2px; }
+        nav { display:flex; align-items:center; gap:8px; }
+        nav a { text-decoration:none; color:#1a1a2e; font-weight:600; font-size:0.95rem; padding:8px 18px; border-radius:40px; transition:0.3s; }
+        nav a:hover, nav a.active { background:var(--primary); color:#fff; }
+        .nav-toggle { display:none; font-size:1.7rem; cursor:pointer; background:none; border:none; }
+
+        /* hero */
+        .hero { margin-top:80px; min-height:92vh; background:linear-gradient(145deg,#fff5f3,#fceae8); display:flex; align-items:center; justify-content:center; padding:40px 30px; position:relative; overflow:hidden; }
+        .hero-content { max-width:1300px; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; z-index:2; }
+        .hero-text h1 { font-size:3.8rem; font-weight:900; line-height:1.2; margin-bottom:18px; }
+        .hero-text h1 .highlight { color:var(--primary); position:relative; }
+        .hero-text h1 .highlight::after { content:''; position:absolute; left:0; bottom:4px; width:100%; height:10px; background:var(--secondary); opacity:0.35; border-radius:4px; z-index:-1; }
+        .hero-text p { font-size:1.2rem; color:#444; max-width:520px; line-height:1.7; margin-bottom:30px; }
+        .hero-btns { display:flex; flex-wrap:wrap; gap:16px; }
+        .btn { display:inline-flex; align-items:center; gap:10px; padding:14px 38px; border-radius:60px; font-weight:700; font-size:1rem; text-decoration:none; transition:0.3s; border:none; cursor:pointer; }
+        .btn-primary { background:var(--primary); color:#fff; box-shadow:0 8px 26px rgba(192,57,43,0.35); }
+        .btn-primary:hover { transform:translateY(-3px); box-shadow:0 14px 34px rgba(192,57,43,0.40); }
+        .btn-outline { background:transparent; color:#1a1a2e; border:2px solid #1a1a2e; }
+        .btn-outline:hover { background:#1a1a2e; color:#fff; }
+        .hero-image { display:flex; justify-content:center; align-items:center; position:relative; }
+        .hero-image .logo-big { width:340px; height:340px; border-radius:50%; background:var(--primary); display:flex; align-items:center; justify-content:center; font-size:8rem; font-weight:900; color:#fff; box-shadow:0 30px 80px rgba(192,57,43,0.25); border:8px solid var(--secondary); animation:float 4s ease-in-out infinite; }
+        @keyframes float { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-18px); } }
+        .hero-image .logo-big span { color:var(--secondary); }
+        .hero-image .badge-float { position:absolute; bottom:20px; right:10px; background:#fff; padding:12px 24px; border-radius:60px; box-shadow:var(--shadow); font-weight:700; color:var(--primary); font-size:0.9rem; display:flex; align-items:center; gap:8px; animation:float 5s ease-in-out infinite; }
+
+        /* sections */
+        section { padding:80px 30px; max-width:1300px; margin:0 auto; }
+        .section-title { text-align:center; font-size:2.8rem; font-weight:800; margin-bottom:12px; }
+        .section-title span { color:var(--primary); }
+        .section-sub { text-align:center; color:#666; font-size:1.1rem; max-width:600px; margin:0 auto 50px auto; }
+
+        /* about */
+        .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; }
+        .about-img { background:linear-gradient(145deg,var(--primary),var(--primary-dark)); border-radius:var(--radius); padding:40px; min-height:320px; display:flex; align-items:center; justify-content:center; flex-direction:column; color:#fff; box-shadow:0 20px 50px rgba(192,57,43,0.20); text-align:center; }
+        .about-img i { font-size:5rem; margin-bottom:16px; color:var(--secondary); }
+        .about-img h3 { font-size:2.2rem; font-weight:800; }
+        .about-img p { opacity:0.9; font-size:1rem; max-width:300px; }
+        .about-text h2 { font-size:2.2rem; margin-bottom:20px; }
+        .about-text p { color:#555; line-height:1.8; margin-bottom:20px; }
+        .about-stats { display:flex; gap:30px; flex-wrap:wrap; margin-top:20px; }
+        .about-stats .stat { text-align:center; }
+        .about-stats .stat h4 { font-size:2.2rem; color:var(--primary); font-weight:900; }
+        .about-stats .stat p { color:#777; font-size:0.9rem; font-weight:600; }
+
+        /* courses */
+        .courses { background:#fff; border-radius:var(--radius); padding:60px 30px; box-shadow:var(--shadow); }
+        .course-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:30px; margin-top:20px; }
+        .course-card { background:var(--light); padding:30px 22px; border-radius:var(--radius); text-align:center; transition:0.3s; border:1px solid #f0e0dc; }
+        .course-card:hover { transform:translateY(-10px); border-color:var(--primary); box-shadow:0 20px 50px rgba(192,57,43,0.10); }
+        .course-card .icon { font-size:2.8rem; color:var(--primary); margin-bottom:12px; }
+        .course-card h4 { font-size:1.2rem; margin-bottom:6px; }
+        .course-card p { color:#666; font-size:0.95rem; }
+        .course-card .tag { display:inline-block; background:var(--secondary); padding:4px 18px; border-radius:40px; font-size:0.75rem; font-weight:700; margin-top:12px; color:#1a1a2e; }
+
+        /* management */
+        .management { background:var(--accent); border-radius:var(--radius); padding:60px 30px; color:#fff; box-shadow:var(--shadow); }
+        .management .section-title { color:#fff; }
+        .management .section-title span { color:var(--secondary); }
+        .management .section-sub { color:rgba(255,255,255,0.7); }
+        .dashboard-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; margin-top:30px; }
+        .dash-card { background:rgba(255,255,255,0.06); backdrop-filter:blur(6px); padding:28px 20px; border-radius:var(--radius); border:1px solid rgba(255,255,255,0.08); text-align:center; transition:0.3s; }
+        .dash-card:hover { background:rgba(255,255,255,0.12); transform:translateY(-6px); }
+        .dash-card i { font-size:2.8rem; color:var(--secondary); margin-bottom:12px; }
+        .dash-card h4 { font-size:1.8rem; font-weight:800; }
+        .dash-card p { opacity:0.7; font-size:0.9rem; }
+        .dash-chart { margin-top:40px; display:grid; grid-template-columns:2fr 1fr; gap:30px; background:rgba(255,255,255,0.04); border-radius:var(--radius); padding:30px; border:1px solid rgba(255,255,255,0.06); }
+        .dash-chart .bar-group { display:flex; flex-direction:column; gap:14px; }
+        .dash-chart .bar-item { display:flex; align-items:center; gap:14px; }
+        .dash-chart .bar-item span { width:100px; font-size:0.9rem; font-weight:600; opacity:0.9; }
+        .dash-chart .bar-item .bar-track { flex:1; height:10px; background:rgba(255,255,255,0.10); border-radius:10px; overflow:hidden; }
+        .dash-chart .bar-item .bar-track .fill { height:100%; border-radius:10px; background:var(--secondary); transition:1s ease; }
+        .dash-chart .info-list { display:flex; flex-direction:column; gap:12px; justify-content:center; }
+        .dash-chart .info-list li { list-style:none; display:flex; align-items:center; gap:12px; font-size:0.95rem; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+        .dash-chart .info-list li i { color:var(--secondary); width:24px; }
+
+        /* testimonials */
+        .testimonials { background:var(--light); border-radius:var(--radius); padding:60px 30px; box-shadow:var(--shadow); }
+        .testi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:30px; }
+        .testi-card { background:#fff; padding:30px 24px; border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,0.04); border-left:6px solid var(--primary); }
+        .testi-card .stars { color:var(--secondary); margin-bottom:10px; font-size:1.1rem; }
+        .testi-card p { font-style:italic; color:#444; line-height:1.6; }
+        .testi-card .author { margin-top:14px; font-weight:700; display:flex; align-items:center; gap:12px; }
+        .testi-card .author .mini-avatar { width:44px; height:44px; border-radius:50%; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+
+        /* contact */
+        .contact { background:#fff; border-radius:var(--radius); padding:60px 30px; box-shadow:var(--shadow); }
+        .contact-wrap { display:grid; grid-template-columns:1fr 1fr; gap:50px; margin-top:30px; }
+        .contact-info h3 { font-size:1.6rem; margin-bottom:16px; }
+        .contact-info p { color:#555; line-height:1.7; margin-bottom:20px; }
+        .contact-info .info-item { display:flex; align-items:center; gap:16px; margin-bottom:14px; }
+        .contact-info .info-item i { width:44px; height:44px; background:var(--light); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:1.2rem; }
+        .contact-form input, .contact-form textarea, .contact-form select { width:100%; padding:14px 20px; border:2px solid #eee; border-radius:12px; font-size:1rem; transition:0.3s; background:var(--light); margin-bottom:16px; outline:none; }
+        .contact-form input:focus, .contact-form textarea:focus, .contact-form select:focus { border-color:var(--primary); background:#fff; }
+        .contact-form textarea { height:130px; resize:vertical; }
+        .contact-form .btn { width:100%; justify-content:center; }
+
+        /* footer */
+        footer { background:var(--accent); color:rgba(255,255,255,0.8); padding:40px 30px 20px; text-align:center; margin-top:20px; border-radius:var(--radius) var(--radius) 0 0; }
+        footer .footer-logo { font-size:2rem; font-weight:800; color:#fff; margin-bottom:6px; }
+        footer .footer-logo span { color:var(--secondary); }
+        footer p { font-size:0.95rem; max-width:500px; margin:0 auto 14px; opacity:0.7; }
+        footer .socials { display:flex; justify-content:center; gap:18px; margin:16px 0 20px; }
+        footer .socials a { color:#fff; font-size:1.4rem; opacity:0.6; transition:0.3s; }
+        footer .socials a:hover { opacity:1; transform:translateY(-3px); }
+        footer .copy { font-size:0.85rem; opacity:0.5; border-top:1px solid rgba(255,255,255,0.06); padding-top:18px; }
+
+        /* responsive */
+        @media (max-width:992px) {
+            .hero-content { grid-template-columns:1fr; text-align:center; }
+            .hero-text p { margin:0 auto 30px; }
+            .hero-btns { justify-content:center; }
+            .hero-image .logo-big { width:220px; height:220px; font-size:5rem; }
+            .about-grid { grid-template-columns:1fr; }
+            .contact-wrap { grid-template-columns:1fr; }
+            .dash-chart { grid-template-columns:1fr; }
+            .section-title { font-size:2.2rem; }
+            nav { position:fixed; top:70px; left:0; width:100%; background:rgba(255,255,255,0.98); backdrop-filter:blur(14px); flex-direction:column; padding:20px; gap:6px; border-radius:0 0 24px 24px; box-shadow:0 20px 40px rgba(0,0,0,0.06); transform:translateY(-120%); transition:0.4s cubic-bezier(0.22,1,0.36,1); z-index:998; }
+            nav.open { transform:translateY(0%); }
+            nav a { width:100%; text-align:center; padding:12px; }
+            .nav-toggle { display:block; }
+            .hero-text h1 { font-size:2.6rem; }
+            body::before { font-size:10rem; } /* Smaller watermark */
+        }
+        @media (max-width:600px) {
+            header { padding:8px 16px; }
+            .logo-text { font-size:1.4rem; }
+            .logo-img { width:44px; height:44px; font-size:1.4rem; }
+            section { padding:50px 16px; }
+            .hero { padding:30px 16px; min-height:auto; }
+            .hero-text h1 { font-size:2.2rem; }
+            .hero-image .logo-big { width:160px; height:160px; font-size:3.6rem; }
+            .hero-image .badge-float { font-size:0.7rem; padding:8px 16px; bottom:0; }
+            .course-grid { grid-template-columns:1fr 1fr; }
+            .dashboard-grid { grid-template-columns:1fr 1fr; }
+            .about-stats { justify-content:center; }
+            body::before { font-size:6rem; }
+        }
+        @media (max-width:420px) {
+            .course-grid, .dashboard-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== PRELOADER ===== -->
+<div id="preloader">
+    <div class="loader-logo">AR<span>COACHING</span></div>
+    <div class="loader-bar"></div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+    <div class="logo-area">
+        <div class="logo-img">AR</div>
+        <div class="logo-text">AR COACHING <small>All Competitive Exams Prep</small></div>
+    </div>
+    <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+    <nav id="navMenu">
+        <a href="#home" class="active">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#courses">Courses</a>
+        <a href="#management">System Management</a>
+        <a href="#contact">Contact Us</a>
+    </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Turn your dreams into reality with <br/><span class="highlight">AR COACHING</span></h1>
+            <p>Our coaching prepares you for all competitive exams – SSC, Bank, Railway, UPSC, State PCS, Defence, Teaching, Police, and many more.</p>
+            <div class="hero-btns">
+                <a href="#courses" class="btn btn-primary"><i class="fas fa-graduation-cap"></i> View Courses</a>
+                <a href="#contact" class="btn btn-outline"><i class="fas fa-phone-alt"></i> Contact Us</a>
+            </div>
+            <div style="margin-top:28px; display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
+                <span style="display:flex;align-items:center;gap:6px;font-weight:600;"><i class="fas fa-check-circle" style="color:var(--primary);"></i> 10+ Years Experience</span>
+                <span style="display:flex;align-items:center;gap:6px;font-weight:600;"><i class="fas fa-check-circle" style="color:var(--primary);"></i> 5000+ Successful Students</span>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="logo-big">AR<span>COACHING</span></div>
+            <div class="badge-float"><i class="fas fa-star"></i> 4.9 ★ (200+ Reviews)</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+    <h2 class="section-title">About <span>Us</span></h2>
+    <p class="section-sub">At AR Coaching, we guide every student towards success.</p>
+    <div class="about-grid">
+        <div class="about-img">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <h3>AR COACHING</h3>
+            <p>The one-stop center for all competitive exams.</p>
+            <div style="margin-top:16px;display:flex;gap:12px;font-size:0.9rem;">
+                <span style="background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:40px;">SSC</span>
+                <span style="background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:40px;">Bank</span>
+                <span style="background:rgba(255,255,255,0.15);padding:4px 16px;border-radius:40px;">Railway</span>
+            </div>
+        </div>
+        <div class="about-text">
+            <h2>Why choose <span style="color:var(--primary);">AR Coaching</span> ?</h2>
+            <p>Established in 2015, we have helped thousands of students achieve their dreams. Our team consists of experienced teachers who specialize in every subject.</p>
+            <p>Whether it's SSC CGL, Bank PO, Railway NTPC, UPSC, State PCS, Defence, Teaching, Police, or any other competitive exam – we have specialized batches and modules for every exam.</p>
+            <div class="about-stats">
+                <div class="stat"><h4>10+</h4><p>Years Experience</p></div>
+                <div class="stat"><h4>5000+</h4><p>Successful Students</p></div>
+                <div class="stat"><h4>50+</h4><p>Expert Faculty</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== COURSES ===== -->
+<section id="courses" class="courses">
+    <h2 class="section-title">Our <span>Courses</span></h2>
+    <p class="section-sub">Specialized batches and courses for all competitive exams.</p>
+    <div class="course-grid">
+        <div class="course-card"><div class="icon"><i class="fas fa-university"></i></div><h4>SSC CGL / CHSL</h4><p>Complete course, mock tests, interview prep</p><span class="tag">New Batch</span></div>
+        <div class="course-card"><div class="icon"><i class="fas fa-landmark"></i></div><h4>Bank PO / Clerk</h4><p>Quant, Reasoning, English, GK</p><span class="tag">Updated</span></div>
+        <div class="course-card"><div class="icon"><i class="fas fa-train"></i></div><h4>Railway NTPC / Group D</h4><p>Technical & Non-Technical</p><span class="tag">Hit Batch</span></div>
+        <div class="course-card"><div class="icon"><i class="fas fa-flag-india"></i></div><h4>UPSC / State PCS</h4><p>Prelims, Mains, Interview</p><span class="tag">Free Demo</span></div>
+        <div class="course-card"><div class="icon"><i class="fas fa-shield-alt"></i></div><h4>Defence / Police</h4><p>CDS, NDA, CAPF, SI, Constable</p><span class="tag">Physical Training</span></div>
+        <div class="course-card"><div class="icon"><i class="fas fa-chalkboard-teacher"></i></div><h4>Teaching / TET</h4><p>CTET, UPTET, REET, DSSSB</p><span class="tag">Live Classes</span></div>
+    </div>
+</section>
+
+<!-- ===== MANAGEMENT ===== -->
+<section id="management" class="management">
+    <h2 class="section-title">System <span>Management</span></h2>
+    <p class="section-sub">Complete management of AR Coaching – at a glance.</p>
+    <div class="dashboard-grid">
+        <div class="dash-card"><i class="fas fa-users"></i><h4>1,280</h4><p>Total Students (Active)</p></div>
+        <div class="dash-card"><i class="fas fa-chalkboard"></i><h4>18</h4><p>Active Batches</p></div>
+        <div class="dash-card"><i class="fas fa-user-tie"></i><h4>52</h4><p>Teachers & Staff</p></div>
+        <div class="dash-card"><i class="fas fa-trophy"></i><h4>94%</h4><p>Success Rate (2025)</p></div>
+    </div>
+    <div class="dash-chart">
+        <div>
+            <h4 style="font-size:1.1rem;margin-bottom:16px;display:flex;align-items:center;gap:10px;"><i class="fas fa-chart-bar" style="color:var(--secondary);"></i> Batch-wise Performance</h4>
+            <div class="bar-group">
+                <div class="bar-item"><span>SSC CGL</span><div class="bar-track"><div class="fill" style="width:92%;"></div></div><span style="font-weight:700;opacity:0.8;">92%</span></div>
+                <div class="bar-item"><span>Bank PO</span><div class="bar-track"><div class="fill" style="width:88%;"></div></div><span style="font-weight:700;opacity:0.8;">88%</span></div>
+                <div class="bar-item"><span>Railway</span><div class="bar-track"><div class="fill" style="width:85%;"></div></div><span style="font-weight:700;opacity:0.8;">85%</span></div>
+                <div class="bar-item"><span>UPSC / PCS</span><div class="bar-track"><div class="fill" style="width:78%;"></div></div><span style="font-weight:700;opacity:0.8;">78%</span></div>
+                <div class="bar-item"><span>Defence / Police</span><div class="bar-track"><div class="fill" style="width:90%;"></div></div><span style="font-weight:700;opacity:0.8;">90%</span></div>
+            </div>
+        </div>
+        <div>
+            <h4 style="font-size:1.1rem;margin-bottom:16px;display:flex;align-items:center;gap:10px;"><i class="fas fa-list-ul" style="color:var(--secondary);"></i> Quick Stats</h4>
+            <ul class="info-list">
+                <li><i class="fas fa-check-circle"></i> 1280 Students Enrolled</li>
+                <li><i class="fas fa-check-circle"></i> 18 Ongoing Batches</li>
+                <li><i class="fas fa-check-circle"></i> 52 Faculty Members</li>
+                <li><i class="fas fa-check-circle"></i> 200+ Online Courses</li>
+                <li><i class="fas fa-check-circle"></i> 5000+ Previous Year Papers</li>
+                <li><i class="fas fa-check-circle"></i> 24/7 Doubt Support</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section id="testimonials" class="testimonials">
+    <h2 class="section-title">Student <span>Testimonials</span></h2>
+    <p class="section-sub">What our students say – real experiences.</p>
+    <div class="testi-grid">
+        <div class="testi-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>"The team at AR Coaching supported me completely during my SSC CGL preparation. Their mock tests and mentorship boosted my confidence."</p><div class="author"><span class="mini-avatar">RS</span><span>Rahul Sharma <small style="font-weight:400;opacity:0.6;">· SSC CGL 2025</small></span></div></div>
+        <div class="testi-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>"I was preparing for Bank PO and the AR Coaching batch was a game-changer for me. The faculty is highly expert."</p><div class="author"><span class="mini-avatar">PS</span><span>Priya Singh <small style="font-weight:400;opacity:0.6;">· Bank PO 2024</small></span></div></div>
+        <div class="testi-card"><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>"AR Coaching's study material and doubt support helped me succeed in UPSC CSE. I will always be grateful to AR."</p><div class="author"><span class="mini-avatar">AK</span><span>Amit Kumar <small style="font-weight:400;opacity:0.6;">· UPSC CSE 2023</small></span></div></div>
+    </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="contact">
+    <h2 class="section-title">Contact <span>Us</span></h2>
+    <p class="section-sub">Get in touch with us for any queries or admissions.</p>
+    <div class="contact-wrap">
+        <div class="contact-info">
+            <h3>Connect with AR COACHING</h3>
+            <p>Our team is ready to solve all your queries and guide you.</p>
+            <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>123, Shiksha Nagar, New Delhi - 110001</span></div>
+            <div class="info-item"><i class="fas fa-phone-alt"></i><span>+91 98765 43210</span></div>
+            <div class="info-item"><i class="fas fa-envelope"></i><span>info@arcoaching.in</span></div>
+            <div class="info-item"><i class="fab fa-whatsapp"></i><span>+91 98765 43211 (WhatsApp)</span></div>
+            <div style="margin-top:20px;display:flex;gap:14px;">
+                <a href="#" style="background:var(--light);padding:10px 16px;border-radius:40px;color:#1a1a2e;font-size:1.2rem;transition:0.3s;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="background:var(--light);padding:10px 16px;border-radius:40px;color:#1a1a2e;font-size:1.2rem;transition:0.3s;"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="background:var(--light);padding:10px 16px;border-radius:40px;color:#1a1a2e;font-size:1.2rem;transition:0.3s;"><i class="fab fa-youtube"></i></a>
+                <a href="#" style="background:var(--light);padding:10px 16px;border-radius:40px;color:#1a1a2e;font-size:1.2rem;transition:0.3s;"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+        <form class="contact-form" onsubmit="event.preventDefault(); alert('✅ Your message has been sent. The AR Coaching team will contact you soon.');">
+            <input type="text" placeholder="Your Full Name" required />
+            <input type="email" placeholder="Email Address" required />
+            <input type="tel" placeholder="Mobile Number" />
+            <select>
+                <option value="">Choose a Course</option>
+                <option>SSC CGL / CHSL</option><option>Bank PO / Clerk</option><option>Railway NTPC / Group D</option>
+                <option>UPSC / State PCS</option><option>Defence / Police</option><option>Teaching / TET</option><option>Other</option>
+            </select>
+            <textarea placeholder="Your Message…" required></textarea>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </form>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="footer-logo">AR <span>COACHING</span></div>
+    <p>The most trusted center for all competitive exams preparation.</p>
+    <div class="socials">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-telegram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+    </div>
+    <div class="copy">&copy; 2026 AR Coaching. All rights reserved. Designed with <i class="fas fa-heart" style="color:var(--secondary);"></i></div>
+</footer>
+
+<script>
+    // Preloader
+    window.addEventListener('load', function() {
+        setTimeout(function() { document.getElementById('preloader').classList.add('hide'); }, 800);
+    });
+
+    // Nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navMenu = document.getElementById('navMenu');
+    navToggle.addEventListener('click', function() {
+        navMenu.classList.toggle('open');
+        this.querySelector('i').className = navMenu.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    });
+    document.querySelectorAll('#navMenu a').forEach(link => {
+        link.addEventListener('click', function() {
+            navMenu.classList.remove('open');
+            navToggle.querySelector('i').className = 'fas fa-bars';
+        });
+    });
+
+    // Active link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('#navMenu a');
+    window.addEventListener('scroll', function() {
+        let current = '';
+        sections.forEach(section => {
+            if (window.pageYOffset >= section.offsetTop - 110) current = section.id;
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+        });
+        document.getElementById('header').classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function(e) {
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior:'smooth' }); }
+        });
+    });
+
+    // Animate bars on scroll
+    let barsAnimated = false;
+    function animateBars() {
+        if (barsAnimated) return;
+        const rect = document.getElementById('management').getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+            document.querySelectorAll('.bar-track .fill').forEach(bar => {
+                const w = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => { bar.style.width = w; }, 200);
+            });
+            barsAnimated = true;
+        }
+    }
+    window.addEventListener('scroll', animateBars);
+    window.addEventListener('load', function() { setTimeout(animateBars, 500); });
+</script>
+
+</body>
+</html>
